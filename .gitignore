@@ -1,0 +1,74 @@
+# Xcode
+build/
+DerivedData/
+*.xcworkspace
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+Packages/
+.swiftpm/xcode/
+.swiftpm/repositories/
+
+# Swift Package Manager Binary Artefacts
+/.build/arm64-apple-macosx
+/.build/x86_64-apple-macosx
+
+# CocoaPods
+Pods/
+Podfile.lock
+Podfile.local.*
+GeneratedPluginRegistrant.*
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+fastlane/readme.md
+
+# Other
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift PM
+.swiftpm
+.build
+
+# User-specific files
+*.swp
+*.swo
+*.orig
+*.DS_Store
+*.swm
+*.mode1v3
+*.mode2v3
+*.moved-aside
+*.xcuserstate
+*.xcuserdata
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Symbols
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.TemporaryItems
+.VFS*
+.Spotlight*
