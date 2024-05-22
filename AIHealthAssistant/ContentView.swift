@@ -5,17 +5,25 @@
 //  Created by Igor Łopatka on 22/05/2024.
 //
 
+import HealthKit
+import HealthKitUI
 import SwiftUI
 
 struct ContentView: View {
+    
+    @StateObject var health = HealthKitManager()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Button("Access HealthKit data") {
         }
-        .padding()
+        .disabled(!health.authenticated)
+        .onAppear {
+        
+            health.initiateHealthKitDataRequest()
+        }
+        .onChange(of: health.trigger) { _ in
+            health.requestHealthKitDataAccess()
+        }
     }
 }
 
