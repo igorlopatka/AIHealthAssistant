@@ -14,7 +14,9 @@
 		45450AB12BFDFC3300F58003 /* AIHealthAssistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450AB02BFDFC3300F58003 /* AIHealthAssistantTests.swift */; };
 		45450ABB2BFDFC3300F58003 /* AIHealthAssistantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450ABA2BFDFC3300F58003 /* AIHealthAssistantUITests.swift */; };
 		45450ABD2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450ABC2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift */; };
-		45450ACA2BFE04E000F58003 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450AC92BFE04E000F58003 /* HealthKitManager.swift */; };
+		45F5A5582C009F2400ADFF84 /* AIHealthAssistantVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */; };
+		45F5A55D2C00A0A500ADFF84 /* OpenAIAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F5A55C2C00A0A500ADFF84 /* OpenAIAPI.swift */; };
+		45F5A5602C00A75B00ADFF84 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F5A55F2C00A75B00ADFF84 /* OpenAIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +48,9 @@
 		45450AB62BFDFC3300F58003 /* AIHealthAssistantUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIHealthAssistantUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45450ABA2BFDFC3300F58003 /* AIHealthAssistantUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantUITests.swift; sourceTree = "<group>"; };
 		45450ABC2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		45450AC92BFE04E000F58003 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantVM.swift; sourceTree = "<group>"; };
+		45F5A55C2C00A0A500ADFF84 /* OpenAIAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIAPI.swift; sourceTree = "<group>"; };
+		45F5A55F2C00A75B00ADFF84 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,8 +102,9 @@
 			isa = PBXGroup;
 			children = (
 				45450A9E2BFDFC3200F58003 /* AIHealthAssistantApp.swift */,
-				45450AC92BFE04E000F58003 /* HealthKitManager.swift */,
+				45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */,
 				45450AA02BFDFC3200F58003 /* ContentView.swift */,
+				45F5A55E2C00A6C700ADFF84 /* OpenAI */,
 				45450AA22BFDFC3300F58003 /* Assets.xcassets */,
 				45450AA42BFDFC3300F58003 /* AIHealthAssistant.entitlements */,
 				45450AA52BFDFC3300F58003 /* Preview Content */,
@@ -132,6 +137,15 @@
 			path = AIHealthAssistantUITests;
 			sourceTree = "<group>";
 		};
+		45F5A55E2C00A6C700ADFF84 /* OpenAI */ = {
+			isa = PBXGroup;
+			children = (
+				45F5A55C2C00A0A500ADFF84 /* OpenAIAPI.swift */,
+				45F5A55F2C00A75B00ADFF84 /* OpenAIService.swift */,
+			);
+			path = OpenAI;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -148,6 +162,8 @@
 			dependencies = (
 			);
 			name = AIHealthAssistant;
+			packageProductDependencies = (
+			);
 			productName = AIHealthAssistant;
 			productReference = 45450A9B2BFDFC3200F58003 /* AIHealthAssistant.app */;
 			productType = "com.apple.product-type.application";
@@ -220,6 +236,8 @@
 				Base,
 			);
 			mainGroup = 45450A922BFDFC3200F58003;
+			packageReferences = (
+			);
 			productRefGroup = 45450A9C2BFDFC3200F58003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -264,7 +282,9 @@
 			files = (
 				45450AA12BFDFC3200F58003 /* ContentView.swift in Sources */,
 				45450A9F2BFDFC3200F58003 /* AIHealthAssistantApp.swift in Sources */,
-				45450ACA2BFE04E000F58003 /* HealthKitManager.swift in Sources */,
+				45F5A5602C00A75B00ADFF84 /* OpenAIService.swift in Sources */,
+				45F5A5582C009F2400ADFF84 /* AIHealthAssistantVM.swift in Sources */,
+				45F5A55D2C00A0A500ADFF84 /* OpenAIAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

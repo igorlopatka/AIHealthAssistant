@@ -11,7 +11,7 @@ import SwiftUI
 struct AIHealthAssistantApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(vm: AIHealthAssistantVM(openAIService: OpenAIService(apiKey: OpenAIAPI.key)))
         }
     }
 }

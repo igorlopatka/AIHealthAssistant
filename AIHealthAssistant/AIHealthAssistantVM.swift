@@ -1,14 +1,17 @@
 //
-//  HealthKitManager.swift
+//  AIHealthAssistantManager.swift
 //  AIHealthAssistant
 //
-//  Created by Igor Łopatka on 21/05/2024.
+//  Created by Igor Łopatka on 24/05/2024.
 //
 
+import Combine
 import Foundation
 import HealthKit
 
-class HealthKitManager: ObservableObject {
+class AIHealthAssistantVM: ObservableObject {
+    
+    //MARK: - HealthKit
     
     @Published var authenticated = false
     @Published var trigger = false
@@ -46,9 +49,22 @@ class HealthKitManager: ObservableObject {
         }
     }
     
+    //MARK: - OpenAI API
     
+    @Published var streamedText: String = ""
     
-    
-    
+        private var openAIService: OpenAIService
+        
+        init(openAIService: OpenAIService) {
+            self.openAIService = openAIService
+        }
+        
+        func streamCompletion(prompt: String) {
+            openAIService.streamCompletion(prompt: prompt) { [weak self] response in
+                DispatchQueue.main.async {
+                    self?.streamedText.append(response)
+                }
+            }
+        }
     
 }
