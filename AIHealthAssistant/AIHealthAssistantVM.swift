@@ -50,7 +50,7 @@ class AIHealthAssistantVM: ObservableObject {
     //MARK: - OpenAI API
     
     @Published var streamedText: String = ""
-    
+        
         private var openAIService: OpenAIService
         
         init(openAIService: OpenAIService) {
@@ -60,7 +60,7 @@ class AIHealthAssistantVM: ObservableObject {
         func streamCompletion(prompt: String) {
             openAIService.streamCompletion(prompt: prompt) { [weak self] response in
                 DispatchQueue.main.async {
-                    self?.streamedText.append(response)
+                    self?.streamedText = response
                 }
             }
         }

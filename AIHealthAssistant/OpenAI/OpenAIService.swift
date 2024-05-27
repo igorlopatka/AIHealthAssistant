@@ -4,12 +4,12 @@
 //
 //  Created by Igor Łopatka on 24/05/2024.
 //
-
 import Foundation
 
 class OpenAIService: NSObject, URLSessionDataDelegate {
     private let apiKey: String
     private var completionHandler: ((String) -> Void)?
+    private var accumulatedResponse: String = ""
 
     init(apiKey: String) {
         self.apiKey = apiKey
@@ -17,6 +17,7 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
     
     func streamCompletion(prompt: String, completion: @escaping (String) -> Void) {
         self.completionHandler = completion
+        self.accumulatedResponse = ""
         let endpoint = URL(string: "https://api.openai.com/v1/chat/completions")!
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
@@ -42,9 +43,24 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
     // Delegate method to handle streaming response
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         if let responseString = String(data: data, encoding: .utf8) {
-            DispatchQueue.main.async {
-                self.completionHandler?(responseString)
-            }
+            responseString
+                .components(separatedBy: "data: ")
+                .forEach { part in
+                    guard !part.isEmpty, let jsonData = part.data(using: .utf8) else { return }
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                           let choices = json["choices"] as? [[String: Any]],
+                           let delta = choices.first?["delta"] as? [String: Any],
+                           let content = delta["content"] as? String {
+                            DispatchQueue.main.async {
+                                self.accumulatedResponse += content
+                                self.completionHandler?(self.accumulatedResponse)
+                            }
+                        }
+                    } catch {
+                        print("Error parsing JSON: \(error)")
+                    }
+                }
         }
     }
     
