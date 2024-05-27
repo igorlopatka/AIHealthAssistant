@@ -15,7 +15,7 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
         self.apiKey = apiKey
     }
     
-    func streamCompletion(prompt: String, completion: @escaping (String) -> Void) {
+    func streamCompletion(messages: [[String: String]], completion: @escaping (String) -> Void) {
         self.completionHandler = completion
         self.accumulatedResponse = ""
         let endpoint = URL(string: "https://api.openai.com/v1/chat/completions")!
@@ -25,11 +25,8 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let parameters: [String: Any] = [
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                ["role": "system", "content": "You are a helpful assistant."],
-                ["role": "user", "content": prompt]
-            ],
+            "model": "gpt-3.5-turbo", // Ensure you use the model you have access to
+            "messages": messages,
             "stream": true
         ]
         
@@ -43,12 +40,18 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
     // Delegate method to handle streaming response
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         if let responseString = String(data: data, encoding: .utf8) {
+            print("Raw response: \(responseString)") // Log the raw response for debugging
+            
             responseString
-                .components(separatedBy: "data: ")
+                .components(separatedBy: "\n")
                 .forEach { part in
-                    guard !part.isEmpty, let jsonData = part.data(using: .utf8) else { return }
+                    guard !part.isEmpty, part != "data: [DONE]" else { return }
+                    
+                    let cleanedPart = part.replacingOccurrences(of: "data: ", with: "")
+                    guard let jsonData = cleanedPart.data(using: .utf8) else { return }
+                    
                     do {
-                        if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                        if let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any],
                            let choices = json["choices"] as? [[String: Any]],
                            let delta = choices.first?["delta"] as? [String: Any],
                            let content = delta["content"] as? String {
@@ -59,6 +62,7 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
                         }
                     } catch {
                         print("Error parsing JSON: \(error)")
+                        print("Part causing error: \(cleanedPart)")
                     }
                 }
         }
