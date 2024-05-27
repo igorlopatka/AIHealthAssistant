@@ -36,7 +36,9 @@ struct ContentView: View {
             
             ScrollView {
                 Text(vm.streamedText)
+                    .textSelection(.enabled)
                     .padding()
+                    
             }
         }
         .padding()
