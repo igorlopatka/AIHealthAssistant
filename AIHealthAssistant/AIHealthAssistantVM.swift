@@ -33,7 +33,6 @@ class AIHealthAssistantVM: ObservableObject {
     
     func initiateHealthKitDataRequest() {
         if HKHealthStore.isHealthDataAvailable() {
-            // Modifying the trigger initiates the health data access request.
             trigger.toggle()
         }
     }
@@ -43,7 +42,6 @@ class AIHealthAssistantVM: ObservableObject {
             if success {
                 self.authenticated = true
             } else {
-                // Handle the error here.
                 fatalError("*** An error occurred while requesting authorization: \(String(describing: error)) ***")
             }
         }
