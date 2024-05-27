@@ -16,40 +16,72 @@ struct ContentView: View {
         _vm = StateObject(wrappedValue: vm)
     }
     
-    @State private var prompt: String = ""
-    
-    var body: some View {
-        VStack {
-            TextField("Enter your prompt", text: $prompt)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            Button(action: {
-                vm.streamCompletion(prompt: prompt)
-            }) {
-                Text("Get Completion")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            
-            ScrollView {
-                Text(vm.streamedText)
-                    .textSelection(.enabled)
-                    .padding()
+    @State private var userMessage: String = ""
+        
+        var body: some View {
+            VStack {
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(vm.conversationHistory.indices, id: \.self) { index in
+                            let message = vm.conversationHistory[index]
+                            HStack {
+                                if message["role"] == "user" {
+                                    Spacer()
+                                    Text(message["content"] ?? "")
+                                        .padding()
+                                        .background(Color.blue)
+                                        .cornerRadius(10)
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal)
+                                } else {
+                                    Text(message["content"] ?? "")
+                                        .padding()
+                                        .background(Color.gray.opacity(0.2))
+                                        .cornerRadius(10)
+                                        .foregroundColor(.black)
+                                        .padding(.horizontal)
+                                    Spacer()
+                                }
+                            }
+                        }
+                        if !vm.streamedText.isEmpty {
+                            HStack {
+                                Text(vm.streamedText)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.2))
+                                    .cornerRadius(10)
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
+                
+                HStack {
+                    TextField("Enter your message", text: $userMessage)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
                     
+                    Button(action: {
+                        vm.sendUserMessage(userMessage)
+                        userMessage = ""
+                        
+                        // Simulate a delay for the assistant to respond
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            vm.addAssistantMessage()
+                        }
+                    }) {
+                        Text("Send")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding()
+                }
             }
         }
-        .padding()
-        Button("Access HealthKit data") {
-            vm.initiateHealthKitDataRequest()
-        }
-        .disabled(!vm.authenticated)
-        .onChange(of: vm.trigger) { _ in
-            vm.requestHealthKitDataAccess()
-        }
-    }
 }
 
 #Preview {

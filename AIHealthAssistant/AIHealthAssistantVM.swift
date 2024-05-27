@@ -11,29 +11,38 @@ import HealthKit
 
 class AIHealthAssistantVM: ObservableObject {
     
-    //MARK: - OpenAI API
+    // MARK: - OpenAI API
     
     @Published var streamedText: String = ""
+    @Published var conversationHistory: [[String: String]] = []
+    
+    private var openAIService: OpenAIService
+    
+    init(openAIService: OpenAIService) {
+        self.openAIService = openAIService
+    }
+    
+    func sendUserMessage(_ message: String) {
+        // Add the user's message to the conversation history
+        conversationHistory.append(["role": "user", "content": message])
+        streamedText = ""  // Clear streamedText for the new message
         
-        private var openAIService: OpenAIService
-        private var conversationHistory: [[String: String]] = []
-        
-        init(openAIService: OpenAIService) {
-            self.openAIService = openAIService
-        }
-        
-        func streamCompletion(prompt: String) {
-            // Add the user's message to the conversation history
-            conversationHistory.append(["role": "user", "content": prompt])
-
-            openAIService.streamCompletion(messages: conversationHistory) { [weak self] response in
-                DispatchQueue.main.async {
-                    // Add the assistant's response to the conversation history
-                    self?.conversationHistory.append(["role": "assistant", "content": response])
-                    self?.streamedText = response
-                }
+        // Start streaming the completion
+        openAIService.streamCompletion(messages: conversationHistory) { [weak self] response in
+            DispatchQueue.main.async {
+                // Update the streamed text as the response comes in
+                self?.streamedText = response
             }
         }
+    }
+    
+    func addAssistantMessage() {
+        // Add the assistant's message to the conversation history when streaming is complete
+        if !streamedText.isEmpty {
+            conversationHistory.append(["role": "assistant", "content": streamedText])
+            streamedText = ""
+        }
+    }
     
     //MARK: - HealthKit
     
