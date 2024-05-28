@@ -109,8 +109,7 @@
 				45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */,
 				45450AA02BFDFC3200F58003 /* ContentView.swift */,
 				45F5A55E2C00A6C700ADFF84 /* OpenAI */,
-				45DE2CE22C05F3C800A0F8C8 /* MessageModel.xcdatamodeld */,
-				45DE2CE52C05F42100A0F8C8 /* CoreDataStack.swift */,
+				45DE2CE72C05F5C100A0F8C8 /* Persistance */,
 				45450AA22BFDFC3300F58003 /* Assets.xcassets */,
 				45450AA42BFDFC3300F58003 /* AIHealthAssistant.entitlements */,
 				45450AA52BFDFC3300F58003 /* Preview Content */,
@@ -141,6 +140,15 @@
 				45450ABC2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift */,
 			);
 			path = AIHealthAssistantUITests;
+			sourceTree = "<group>";
+		};
+		45DE2CE72C05F5C100A0F8C8 /* Persistance */ = {
+			isa = PBXGroup;
+			children = (
+				45DE2CE22C05F3C800A0F8C8 /* MessageModel.xcdatamodeld */,
+				45DE2CE52C05F42100A0F8C8 /* CoreDataStack.swift */,
+			);
+			path = Persistance;
 			sourceTree = "<group>";
 		};
 		45F5A55E2C00A6C700ADFF84 /* OpenAI */ = {
