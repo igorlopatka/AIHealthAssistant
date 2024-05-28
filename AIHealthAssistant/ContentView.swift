@@ -10,10 +10,10 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject private var vm: AIHealthAssistantVM
+    @StateObject private var viewModel: AIHealthAssistantVM
     
     init(vm: AIHealthAssistantVM) {
-        _vm = StateObject(wrappedValue: vm)
+        _viewModel = StateObject(wrappedValue: vm)
     }
     
     @State private var userMessage: String = ""
@@ -22,8 +22,8 @@ struct ContentView: View {
             VStack {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        ForEach(vm.conversationHistory.indices, id: \.self) { index in
-                            let message = vm.conversationHistory[index]
+                        ForEach(viewModel.conversationHistory.indices, id: \.self) { index in
+                            let message = viewModel.conversationHistory[index]
                             HStack {
                                 if message["role"] == "user" {
                                     Spacer()
@@ -44,9 +44,9 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        if !vm.streamedText.isEmpty {
+                        if !viewModel.streamedText.isEmpty {
                             HStack {
-                                Text(vm.streamedText)
+                                Text(viewModel.streamedText)
                                     .padding()
                                     .background(Color.gray.opacity(0.2))
                                     .cornerRadius(10)
@@ -64,12 +64,12 @@ struct ContentView: View {
                         .padding()
                     
                     Button(action: {
-                        vm.sendUserMessage(userMessage)
+                        viewModel.sendUserMessage(userMessage)
                         userMessage = ""
                         
                         // Simulate a delay for the assistant to respond
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            vm.addAssistantMessage()
+                            viewModel.addAssistantMessage()
                         }
                     }) {
                         Text("Send")
@@ -81,8 +81,7 @@ struct ContentView: View {
                     .padding()
                 }
             }
-        }
-}
+        }}
 
 #Preview {
     ContentView(vm: AIHealthAssistantVM(openAIService: OpenAIService(apiKey: OpenAIAPI.key)))

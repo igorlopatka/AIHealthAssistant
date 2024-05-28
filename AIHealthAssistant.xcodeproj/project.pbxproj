@@ -14,6 +14,8 @@
 		45450AB12BFDFC3300F58003 /* AIHealthAssistantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450AB02BFDFC3300F58003 /* AIHealthAssistantTests.swift */; };
 		45450ABB2BFDFC3300F58003 /* AIHealthAssistantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450ABA2BFDFC3300F58003 /* AIHealthAssistantUITests.swift */; };
 		45450ABD2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450ABC2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift */; };
+		45DE2CE42C05F3C800A0F8C8 /* MessageModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 45DE2CE22C05F3C800A0F8C8 /* MessageModel.xcdatamodeld */; };
+		45DE2CE62C05F42100A0F8C8 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE2CE52C05F42100A0F8C8 /* CoreDataStack.swift */; };
 		45F5A5582C009F2400ADFF84 /* AIHealthAssistantVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */; };
 		45F5A55D2C00A0A500ADFF84 /* OpenAIAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F5A55C2C00A0A500ADFF84 /* OpenAIAPI.swift */; };
 		45F5A5602C00A75B00ADFF84 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F5A55F2C00A75B00ADFF84 /* OpenAIService.swift */; };
@@ -48,6 +50,8 @@
 		45450AB62BFDFC3300F58003 /* AIHealthAssistantUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIHealthAssistantUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45450ABA2BFDFC3300F58003 /* AIHealthAssistantUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantUITests.swift; sourceTree = "<group>"; };
 		45450ABC2BFDFC3300F58003 /* AIHealthAssistantUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		45DE2CE32C05F3C800A0F8C8 /* Message.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Message.xcdatamodel; sourceTree = "<group>"; };
+		45DE2CE52C05F42100A0F8C8 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantVM.swift; sourceTree = "<group>"; };
 		45F5A55C2C00A0A500ADFF84 /* OpenAIAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIAPI.swift; sourceTree = "<group>"; };
 		45F5A55F2C00A75B00ADFF84 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 				45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */,
 				45450AA02BFDFC3200F58003 /* ContentView.swift */,
 				45F5A55E2C00A6C700ADFF84 /* OpenAI */,
+				45DE2CE22C05F3C800A0F8C8 /* MessageModel.xcdatamodeld */,
+				45DE2CE52C05F42100A0F8C8 /* CoreDataStack.swift */,
 				45450AA22BFDFC3300F58003 /* Assets.xcassets */,
 				45450AA42BFDFC3300F58003 /* AIHealthAssistant.entitlements */,
 				45450AA52BFDFC3300F58003 /* Preview Content */,
@@ -283,6 +289,8 @@
 				45450AA12BFDFC3200F58003 /* ContentView.swift in Sources */,
 				45450A9F2BFDFC3200F58003 /* AIHealthAssistantApp.swift in Sources */,
 				45F5A5602C00A75B00ADFF84 /* OpenAIService.swift in Sources */,
+				45DE2CE42C05F3C800A0F8C8 /* MessageModel.xcdatamodeld in Sources */,
+				45DE2CE62C05F42100A0F8C8 /* CoreDataStack.swift in Sources */,
 				45F5A5582C009F2400ADFF84 /* AIHealthAssistantVM.swift in Sources */,
 				45F5A55D2C00A0A500ADFF84 /* OpenAIAPI.swift in Sources */,
 			);
@@ -647,6 +655,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		45DE2CE22C05F3C800A0F8C8 /* MessageModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				45DE2CE32C05F3C800A0F8C8 /* Message.xcdatamodel */,
+			);
+			currentVersion = 45DE2CE32C05F3C800A0F8C8 /* Message.xcdatamodel */;
+			path = MessageModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 45450A932BFDFC3200F58003 /* Project object */;
 }

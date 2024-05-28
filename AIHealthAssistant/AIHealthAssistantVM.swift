@@ -6,6 +6,7 @@
 //
 
 import Combine
+import CoreData
 import Foundation
 import HealthKit
 
@@ -14,35 +15,57 @@ class AIHealthAssistantVM: ObservableObject {
     // MARK: - OpenAI API
     
     @Published var streamedText: String = ""
-    @Published var conversationHistory: [[String: String]] = []
-    
-    private var openAIService: OpenAIService
-    
-    init(openAIService: OpenAIService) {
-        self.openAIService = openAIService
-    }
-    
-    func sendUserMessage(_ message: String) {
-        // Add the user's message to the conversation history
-        conversationHistory.append(["role": "user", "content": message])
-        streamedText = ""  // Clear streamedText for the new message
+        @Published var conversationHistory: [[String: String]] = []
         
-        // Start streaming the completion
-        openAIService.streamCompletion(messages: conversationHistory) { [weak self] response in
-            DispatchQueue.main.async {
-                // Update the streamed text as the response comes in
-                self?.streamedText = response
+        private var openAIService: OpenAIService
+        private var coreDataStack: CoreDataStack
+        
+        init(openAIService: OpenAIService, coreDataStack: CoreDataStack = CoreDataStack.shared) {
+            self.openAIService = openAIService
+            self.coreDataStack = coreDataStack
+            loadMessages()
+        }
+        
+        func sendUserMessage(_ message: String) {
+            // Add the user's message to the conversation history
+            addMessage(role: "user", content: message)
+            streamedText = ""  // Clear streamedText for the new message
+            
+            // Start streaming the completion
+            openAIService.streamCompletion(messages: conversationHistory) { [weak self] response in
+                DispatchQueue.main.async {
+                    // Update the streamed text as the response comes in
+                    self?.streamedText = response
+                }
             }
         }
-    }
-    
-    func addAssistantMessage() {
-        // Add the assistant's message to the conversation history when streaming is complete
-        if !streamedText.isEmpty {
-            conversationHistory.append(["role": "assistant", "content": streamedText])
-            streamedText = ""
+        
+        func addAssistantMessage() {
+            // Add the assistant's message to the conversation history when streaming is complete
+            if !streamedText.isEmpty {
+                addMessage(role: "assistant", content: streamedText)
+                streamedText = ""
+            }
         }
-    }
+        
+        private func addMessage(role: String, content: String) {
+            conversationHistory.append(["role": role, "content": content])
+            let message = Message(context: coreDataStack.context)
+            message.role = role
+            message.content = content
+            coreDataStack.saveContext()
+        }
+        
+        private func loadMessages() {
+            let fetchRequest: NSFetchRequest<Message> = Message.fetchRequest()
+            
+            do {
+                let messages = try coreDataStack.context.fetch(fetchRequest)
+                conversationHistory = messages.map { ["role": $0.role ?? "", "content": $0.content ?? ""] }
+            } catch {
+                print("Failed to fetch messages: \(error)")
+            }
+        }
     
     //MARK: - HealthKit
     
