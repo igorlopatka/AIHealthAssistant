@@ -13,9 +13,8 @@ import HealthKit
 class AIHealthAssistantVM: ObservableObject {
     
     // MARK: - OpenAI API
-    
     @Published var streamedText: String = ""
-        @Published var conversationHistory: [[String: String]] = []
+        @Published var conversationHistory: [Message] = []
         
         private var openAIService: OpenAIService
         private var coreDataStack: CoreDataStack
@@ -28,7 +27,8 @@ class AIHealthAssistantVM: ObservableObject {
         
         func sendUserMessage(_ message: String) {
             // Add the user's message to the conversation history
-            addMessage(role: "user", content: message)
+            let userMessage = Message(role: .user, content: message)
+            addMessage(userMessage)
             streamedText = ""  // Clear streamedText for the new message
             
             // Start streaming the completion
@@ -43,25 +43,26 @@ class AIHealthAssistantVM: ObservableObject {
         func addAssistantMessage() {
             // Add the assistant's message to the conversation history when streaming is complete
             if !streamedText.isEmpty {
-                addMessage(role: "assistant", content: streamedText)
+                let assistantMessage = Message(role: .assistant, content: streamedText)
+                addMessage(assistantMessage)
                 streamedText = ""
             }
         }
         
-        private func addMessage(role: String, content: String) {
-            conversationHistory.append(["role": role, "content": content])
-            let message = Message(context: coreDataStack.context)
-            message.role = role
-            message.content = content
+        private func addMessage(_ message: Message) {
+            conversationHistory.append(message)
+            let messageEntity = MessageEntity(context: coreDataStack.context)
+            messageEntity.role = message.role.rawValue
+            messageEntity.content = message.content
             coreDataStack.saveContext()
         }
         
         private func loadMessages() {
-            let fetchRequest: NSFetchRequest<Message> = Message.fetchRequest()
+            let fetchRequest: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
             
             do {
                 let messages = try coreDataStack.context.fetch(fetchRequest)
-                conversationHistory = messages.map { ["role": $0.role ?? "", "content": $0.content ?? ""] }
+                conversationHistory = messages.map { Message(role: MessageRole(rawValue: $0.role ?? "") ?? .user, content: $0.content ?? "") }
             } catch {
                 print("Failed to fetch messages: \(error)")
             }

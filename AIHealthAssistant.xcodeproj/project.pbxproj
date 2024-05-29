@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		45028A922C0754B80009B101 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45028A912C0754B80009B101 /* Message.swift */; };
 		45450A9F2BFDFC3200F58003 /* AIHealthAssistantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450A9E2BFDFC3200F58003 /* AIHealthAssistantApp.swift */; };
 		45450AA12BFDFC3200F58003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45450AA02BFDFC3200F58003 /* ContentView.swift */; };
 		45450AA32BFDFC3300F58003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45450AA22BFDFC3300F58003 /* Assets.xcassets */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		45028A912C0754B80009B101 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		45450A9B2BFDFC3200F58003 /* AIHealthAssistant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIHealthAssistant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45450A9E2BFDFC3200F58003 /* AIHealthAssistantApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIHealthAssistantApp.swift; sourceTree = "<group>"; };
 		45450AA02BFDFC3200F58003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -109,7 +111,7 @@
 				45F5A5572C009F2400ADFF84 /* AIHealthAssistantVM.swift */,
 				45450AA02BFDFC3200F58003 /* ContentView.swift */,
 				45F5A55E2C00A6C700ADFF84 /* OpenAI */,
-				45DE2CE72C05F5C100A0F8C8 /* Persistance */,
+				45DE2CE72C05F5C100A0F8C8 /* Model */,
 				45450AA22BFDFC3300F58003 /* Assets.xcassets */,
 				45450AA42BFDFC3300F58003 /* AIHealthAssistant.entitlements */,
 				45450AA52BFDFC3300F58003 /* Preview Content */,
@@ -142,13 +144,14 @@
 			path = AIHealthAssistantUITests;
 			sourceTree = "<group>";
 		};
-		45DE2CE72C05F5C100A0F8C8 /* Persistance */ = {
+		45DE2CE72C05F5C100A0F8C8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				45DE2CE22C05F3C800A0F8C8 /* MessageModel.xcdatamodeld */,
 				45DE2CE52C05F42100A0F8C8 /* CoreDataStack.swift */,
+				45028A912C0754B80009B101 /* Message.swift */,
 			);
-			path = Persistance;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		45F5A55E2C00A6C700ADFF84 /* OpenAI */ = {
@@ -299,6 +302,7 @@
 				45F5A5602C00A75B00ADFF84 /* OpenAIService.swift in Sources */,
 				45DE2CE42C05F3C800A0F8C8 /* MessageModel.xcdatamodeld in Sources */,
 				45DE2CE62C05F42100A0F8C8 /* CoreDataStack.swift in Sources */,
+				45028A922C0754B80009B101 /* Message.swift in Sources */,
 				45F5A5582C009F2400ADFF84 /* AIHealthAssistantVM.swift in Sources */,
 				45F5A55D2C00A0A500ADFF84 /* OpenAIAPI.swift in Sources */,
 			);
