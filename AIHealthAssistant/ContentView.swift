@@ -80,6 +80,11 @@ struct ContentView: View {
                 .padding()
             }
         }
+        .onAppear {
+            if !viewModel.authenticated {
+                viewModel.requestHealthKitDataAccess()
+            }
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 import Foundation
 
 class OpenAIService: NSObject, URLSessionDataDelegate {
+    
     private let apiKey: String
     private var completionHandler: ((String) -> Void)?
     private var accumulatedResponse: String = ""
@@ -16,18 +17,15 @@ class OpenAIService: NSObject, URLSessionDataDelegate {
     }
     
     func streamCompletion(messages: [Message], completion: @escaping (String) -> Void) {
-        self.completionHandler = completion
-        self.accumulatedResponse = ""
         let endpoint = URL(string: "https://api.openai.com/v1/chat/completions")!
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        // Convert Message objects to the dictionary format expected by the API
         let messageDictionaries = messages.map { ["role": $0.role.rawValue, "content": $0.content] }
         let parameters: [String: Any] = [
-            "model": "gpt-3.5-turbo", // Ensure you use the model you have access to
+            "model": "gpt-3.5-turbo", // Ensure you use the correct model
             "messages": messageDictionaries,
             "stream": true
         ]

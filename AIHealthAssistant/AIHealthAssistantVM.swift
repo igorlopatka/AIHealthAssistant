@@ -14,59 +14,65 @@ class AIHealthAssistantVM: ObservableObject {
     
     // MARK: - OpenAI API
     @Published var streamedText: String = ""
-        @Published var conversationHistory: [Message] = []
-        
-        private var openAIService: OpenAIService
-        private var coreDataStack: CoreDataStack
-        
-        init(openAIService: OpenAIService, coreDataStack: CoreDataStack = CoreDataStack.shared) {
-            self.openAIService = openAIService
-            self.coreDataStack = coreDataStack
-            loadMessages()
-        }
-        
-        func sendUserMessage(_ message: String) {
-            // Add the user's message to the conversation history
-            let userMessage = Message(role: .user, content: message)
-            addMessage(userMessage)
-            streamedText = ""  // Clear streamedText for the new message
+    @Published var conversationHistory: [Message] = []
+    
+    private var openAIService: OpenAIService
+    private var coreDataStack: CoreDataStack
+    
+    init(openAIService: OpenAIService, coreDataStack: CoreDataStack = CoreDataStack.shared) {
+        self.openAIService = openAIService
+        self.coreDataStack = coreDataStack
+        loadMessages()
+    }
+    
+    func sendUserMessage(_ message: String) {
+        fetchAndPrepareHealthData { [weak self] healthData in
+            guard let self = self else { return }
             
-            // Start streaming the completion
-            openAIService.streamCompletion(messages: conversationHistory) { [weak self] response in
+            let userMessage = Message(role: .user, content: message)
+            self.addMessage(userMessage)
+            
+            if !healthData.isEmpty {
+                let healthContextMessage = Message(role: .assistant, content: "Health data: \(healthData)")
+                self.addMessage(healthContextMessage)
+            }
+            
+            self.streamedText = ""  // Clear any previous response
+            self.openAIService.streamCompletion(messages: self.conversationHistory) { response in
                 DispatchQueue.main.async {
-                    // Update the streamed text as the response comes in
-                    self?.streamedText = response
+                    self.streamedText += response
                 }
             }
         }
-        
-        func addAssistantMessage() {
-            // Add the assistant's message to the conversation history when streaming is complete
-            if !streamedText.isEmpty {
-                let assistantMessage = Message(role: .assistant, content: streamedText)
-                addMessage(assistantMessage)
-                streamedText = ""
-            }
+    }
+    
+    func addAssistantMessage() {
+        // Add the assistant's message to the conversation history when streaming is complete
+        if !streamedText.isEmpty {
+            let assistantMessage = Message(role: .assistant, content: streamedText)
+            addMessage(assistantMessage)
+            streamedText = ""
         }
+    }
+    
+    private func addMessage(_ message: Message) {
+        conversationHistory.append(message)
+        let messageEntity = MessageEntity(context: coreDataStack.context)
+        messageEntity.role = message.role.rawValue
+        messageEntity.content = message.content
+        coreDataStack.saveContext()
+    }
+    
+    private func loadMessages() {
+        let fetchRequest: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
         
-        private func addMessage(_ message: Message) {
-            conversationHistory.append(message)
-            let messageEntity = MessageEntity(context: coreDataStack.context)
-            messageEntity.role = message.role.rawValue
-            messageEntity.content = message.content
-            coreDataStack.saveContext()
+        do {
+            let messages = try coreDataStack.context.fetch(fetchRequest)
+            conversationHistory = messages.map { Message(role: MessageRole(rawValue: $0.role ?? "") ?? .user, content: $0.content ?? "") }
+        } catch {
+            print("Failed to fetch messages: \(error)")
         }
-        
-        private func loadMessages() {
-            let fetchRequest: NSFetchRequest<MessageEntity> = MessageEntity.fetchRequest()
-            
-            do {
-                let messages = try coreDataStack.context.fetch(fetchRequest)
-                conversationHistory = messages.map { Message(role: MessageRole(rawValue: $0.role ?? "") ?? .user, content: $0.content ?? "") }
-            } catch {
-                print("Failed to fetch messages: \(error)")
-            }
-        }
+    }
     
     //MARK: - HealthKit
     
@@ -163,6 +169,32 @@ class AIHealthAssistantVM: ObservableObject {
         return (allSampleTypes, allCharacteristicTypes)
     }
     
+    func fetchAndPrepareHealthData(completion: @escaping ([String: Any]) -> Void) {
+        let allTypes = allHealthDataTypes.sampleTypes.union(allHealthDataTypes.sampleTypes)
+        var healthData: [String: Any] = [:]
+        let dispatchGroup = DispatchGroup()
+        
+        for type in allTypes {
+            dispatchGroup.enter()
+            let query = HKSampleQuery(sampleType: type, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { _, results, _ in
+                // Here you need to customize how you process each type
+                healthData[type.identifier] = self.processResults(results)
+                dispatchGroup.leave()
+            }
+            healthStore.execute(query)
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            completion(healthData)
+        }
+    }
+    
+    private func processResults(_ results: [HKSample]?) -> Any {
+        // Simplify the results into a manageable format for API transmission
+        // This example assumes we are summarizing data - customize as necessary
+        return results?.map { $0.description } ?? []
+    }
+    
     
     func initiateHealthKitDataRequest() {
         if HKHealthStore.isHealthDataAvailable() {
@@ -173,15 +205,16 @@ class AIHealthAssistantVM: ObservableObject {
     func requestHealthKitDataAccess() {
         let allSampleTypes = allHealthDataTypes.sampleTypes
         let allCharacteristicTypes = allHealthDataTypes.characteristicTypes
-
+        
         // Prepare the read types set correctly by including all sample types (which are also object types)
         // and all characteristic types. Both are subsets of HKObjectType, so union them correctly.
         var readTypes = Set<HKObjectType>(allSampleTypes)
         readTypes.formUnion(allCharacteristicTypes)
-
+        
         healthStore.requestAuthorization(toShare: allSampleTypes, read: readTypes) { success, error in
             if success {
                 self.authenticated = true
+                print(self.allHealthDataTypes)
             } else {
                 fatalError("*** An error occurred while requesting authorization: \(String(describing: error)) ***")
             }
