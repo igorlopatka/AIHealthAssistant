@@ -143,28 +143,28 @@ class AIHealthAssistantVM: ObservableObject {
             }
         }
         
-        // Add document types
-        if let allergyRecordType = HKObjectType.clinicalType(forIdentifier: .allergyRecord) {
-            allSampleTypes.insert(allergyRecordType)
-        }
-        if let conditionRecordType = HKObjectType.clinicalType(forIdentifier: .conditionRecord) {
-            allSampleTypes.insert(conditionRecordType)
-        }
-        if let immunizationRecordType = HKObjectType.clinicalType(forIdentifier: .immunizationRecord) {
-            allSampleTypes.insert(immunizationRecordType)
-        }
-        if let labResultRecordType = HKObjectType.clinicalType(forIdentifier: .labResultRecord) {
-            allSampleTypes.insert(labResultRecordType)
-        }
-        if let medicationRecordType = HKObjectType.clinicalType(forIdentifier: .medicationRecord) {
-            allSampleTypes.insert(medicationRecordType)
-        }
-        if let procedureRecordType = HKObjectType.clinicalType(forIdentifier: .procedureRecord) {
-            allSampleTypes.insert(procedureRecordType)
-        }
-        if let vitalSignRecordType = HKObjectType.clinicalType(forIdentifier: .vitalSignRecord) {
-            allSampleTypes.insert(vitalSignRecordType)
-        }
+//        // Add document types
+//        if let allergyRecordType = HKObjectType.clinicalType(forIdentifier: .allergyRecord) {
+//            allSampleTypes.insert(allergyRecordType)
+//        }
+//        if let conditionRecordType = HKObjectType.clinicalType(forIdentifier: .conditionRecord) {
+//            allSampleTypes.insert(conditionRecordType)
+//        }
+//        if let immunizationRecordType = HKObjectType.clinicalType(forIdentifier: .immunizationRecord) {
+//            allSampleTypes.insert(immunizationRecordType)
+//        }
+//        if let labResultRecordType = HKObjectType.clinicalType(forIdentifier: .labResultRecord) {
+//            allSampleTypes.insert(labResultRecordType)
+//        }
+//        if let medicationRecordType = HKObjectType.clinicalType(forIdentifier: .medicationRecord) {
+//            allSampleTypes.insert(medicationRecordType)
+//        }
+//        if let procedureRecordType = HKObjectType.clinicalType(forIdentifier: .procedureRecord) {
+//            allSampleTypes.insert(procedureRecordType)
+//        }
+//        if let vitalSignRecordType = HKObjectType.clinicalType(forIdentifier: .vitalSignRecord) {
+//            allSampleTypes.insert(vitalSignRecordType)
+//        }
         
         return (allSampleTypes, allCharacteristicTypes)
     }
